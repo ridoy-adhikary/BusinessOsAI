@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BusinessOS — System Architecture &amp; Workflow</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  :root{
+    --bg:#0b0e14; --panel:#121722; --panel2:#161c29; --border:#232b3d;
+    --text:#e7ebf3; --text2:#9aa5b8; --accent:#5b8cff; --accent2:#3ad0a8;
+    --amber:#f2b84b; --coral:#f0846a; --pink:#e26ba0; --purple:#8f7ee8;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;
+  }
+  header.hero{
+    padding:56px 24px 40px; text-align:center;
+    background:linear-gradient(180deg,#141a28 0%, #0b0e14 100%);
+    border-bottom:1px solid var(--border);
+  }
+  header.hero h1{font-size:30px; margin:0 0 8px; font-weight:600; letter-spacing:.2px;}
+  header.hero p{color:var(--text2); max-width:720px; margin:0 auto; font-size:15px;}
+  .badge-row{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:20px;}
+  .badge{
+    font-size:12.5px; padding:6px 12px; border-radius:999px;
+    border:1px solid var(--border); color:var(--text2); background:var(--panel);
+  }
+  nav.toc{
+    max-width:1100px; margin:32px auto 0; padding:0 24px;
+  }
+  nav.toc h2{font-size:14px; text-transform:uppercase; letter-spacing:.08em; color:var(--text2); font-weight:600; margin-bottom:14px;}
+  .toc-grid{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:8px;
+  }
+  .toc-grid a{
+    display:block; padding:10px 14px; background:var(--panel); border:1px solid var(--border);
+    border-radius:8px; color:var(--text); text-decoration:none; font-size:13.5px;
+  }
+  .toc-grid a:hover{border-color:var(--accent); color:var(--accent);}
+  main{max-width:1100px; margin:0 auto; padding:8px 24px 80px;}
+  section.block{
+    margin-top:40px; padding:26px 28px; background:var(--panel);
+    border:1px solid var(--border); border-radius:var(--radius);
+  }
+  section.block h2{
+    font-size:19px; margin:0 0 4px; font-weight:600; display:flex; align-items:center; gap:10px;
+  }
+  section.block .num{
+    font-size:12px; color:var(--bg); background:var(--accent2);
+    width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;
+    font-weight:700; flex:none;
+  }
+  section.block p.desc{color:var(--text2); font-size:14px; margin:6px 0 18px; max-width:800px;}
+  .diagram-wrap{
+    background:var(--panel2); border:1px solid var(--border); border-radius:8px;
+    padding:16px; overflow-x:auto;
+  }
+  .two-col{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  @media (max-width:820px){ .two-col{grid-template-columns:1fr;} }
+  .legend{
+    display:flex; flex-wrap:wrap; gap:14px; margin:28px auto 0; max-width:1100px; padding:0 24px 0;
+    font-size:12.5px; color:var(--text2);
+  }
+  .legend span.dot{display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:-1px;}
+  footer{text-align:center; color:var(--text2); font-size:12.5px; padding:30px 24px 50px;}
+  a.backtop{color:var(--accent); text-decoration:none; font-size:12.5px;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>BusinessOS</h1>
+  <p>All-in-one business operating system for Bangladesh — a unified platform connecting products, inventory, orders, customers, POS, payments, warehouses, packaging, QR verification, courier, delivery, returns, finance, marketing, analytics and AI into a single business core.</p>
+  <div class="badge-row">
+    <span class="badge">Online</span>
+    <span class="badge">Offline / POS</span>
+    <span class="badge">Omnichannel</span>
+    <span class="badge">Multi-tenant SaaS</span>
+    <span class="badge">AI-driven</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <div class="toc-grid" id="tocGrid"></div>
+</nav>
+
+<div class="legend" id="legendRow">
+  <span><span class="dot" style="background:#5b8cff"></span>Actors / entry points</span>
+  <span><span class="dot" style="background:#8f7ee8"></span>Core process</span>
+  <span><span class="dot" style="background:#f2b84b"></span>Decision point</span>
+  <span><span class="dot" style="background:#3ad0a8"></span>Data / storage</span>
+  <span><span class="dot" style="background:#f0846a"></span>External system</span>
+  <span><span class="dot" style="background:#e26ba0"></span>AI / automation</span>
+</div>
+
+<main>
+
+<section class="block" id="s1">
+  <h2><span class="num">1</span>Actors &amp; external systems</h2>
+  <p class="desc">Four actor types interact with BusinessOS; sales and operational data flow in from external channels and out to payment, courier and notification providers.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TB
+  subgraph Actors["Platform actors"]
+    OWNER[Business owner]:::actor
+    EMP[Business employee]:::actor
+    CUST[Customer]:::actor
+    ADMIN[Platform administrator]:::actor
+  end
+  subgraph Ext["External systems"]
+    FB[Facebook]:::ext
+    MSG[Messenger]:::ext
+    WA[WhatsApp]:::ext
+    WEB[Business website]:::ext
+    PHONE[Phone orders]:::ext
+    POS[Physical shop / POS]:::ext
+    PAY[Payment gateways]:::ext
+    MFS[Mobile financial services]:::ext
+    COUR[Courier companies]:::ext
+    NOTIF[SMS / email / notifications]:::ext
+  end
+  BOS[(BusinessOS core)]:::store
+  OWNER --> BOS
+  EMP --> BOS
+  CUST --> BOS
+  ADMIN --> BOS
+  FB --> BOS
+  MSG --> BOS
+  WA --> BOS
+  WEB --> BOS
+  PHONE --> BOS
+  POS --> BOS
+  BOS --> PAY
+  BOS --> MFS
+  BOS --> COUR
+  BOS --> NOTIF
+  </pre></div>
+</section>
+
+<section class="block" id="s2">
+  <h2><span class="num">2</span>Business registration &amp; onboarding</h2>
+  <p class="desc">Every owner who signs up receives an isolated, multi-tenant workspace once payment and setup are complete.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  A[Owner]:::actor --> B[Create account]:::proc
+  B --> C[Verify phone / email]:::proc
+  C --> D[Create business]:::proc
+  D --> E[Enter business information]:::proc
+  E --> F{Select business type}:::dec
+  F --> F1[Online]:::proc
+  F --> F2[Offline]:::proc
+  F --> F3[Online + offline]:::proc
+  F1 --> G[Select subscription plan]:::proc
+  F2 --> G
+  F3 --> G
+  G --> H[Payment]:::ext
+  H --> I[(Isolated tenant workspace created)]:::store
+  I --> J[Owner dashboard]:::proc
+  </pre></div>
+</section>
+
+<section class="block" id="s3">
+  <h2><span class="num">3</span>Owner dashboard — central control center</h2>
+  <p class="desc">A single screen surfaces sales, stock, customer, courier, finance and AI signals, with every metric clickable through to its module.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TB
+  DB[Owner dashboard]:::proc
+  DB --> SALES["Sales & orders<br/>today, pending, delivered, cancelled"]:::proc
+  DB --> PROD["Product & stock<br/>low / out of stock, best sellers"]:::proc
+  DB --> CUST2["Customer stats<br/>new, returning, VIP, high-risk COD"]:::proc
+  DB --> SHIP["Courier & shipping<br/>pickups, in-transit, delivered"]:::proc
+  DB --> FIN["Finance<br/>expenses, fees, estimated profit"]:::proc
+  DB --> AI2["Alerts & AI recommendations"]:::ai
+  SALES --> ORD[(Orders module)]:::store
+  PROD --> INV[(Inventory module)]:::store
+  CUST2 --> CU[(Customers module)]:::store
+  SHIP --> CR[(Courier module)]:::store
+  FIN --> FI[(Finance module)]:::store
+  </pre></div>
+</section>
+
+<section class="block" id="s4">
+  <h2><span class="num">4</span>Product management</h2>
+  <p class="desc">Products are created once and shared live across every sales channel, POS, inventory, orders and analytics — no duplication between systems.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  A[Owner]:::actor --> B[Products]:::proc
+  B --> C[Create product]:::proc
+  C --> D["Product information<br/>name, price, SKU, barcode, QR, variants"]:::proc
+  D --> E[Product created]:::proc
+  E --> F[Inventory assigned]:::store
+  F --> G{{Shared across channels}}:::dec
+  G --> H1[Website]:::ext
+  G --> H2[Facebook / online]:::ext
+  G --> H3[POS]:::ext
+  G --> H4[Inventory]:::store
+  G --> H5[Orders]:::store
+  G --> H6[Reports & analytics]:::ai
+  </pre></div>
+</section>
+
+<section class="block" id="s5">
+  <h2><span class="num">5</span>Inventory management</h2>
+  <p class="desc">Stock moves through defined states and is recalculated in real time as sales land from any channel — for example, a base of 500 units minus 2 Facebook, 3 website and 1 POS sale, plus 1 return, always resolves to a single live available-stock number.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  subgraph States["Inventory states"]
+    S1[Available]:::store
+    S2[Reserved]:::store
+    S3[Damaged]:::store
+    S4[Returned]:::store
+    S5[In transit]:::store
+    S6[Low stock]:::store
+    S7[Out of stock]:::store
+  end
+  P[Purchase / stock receive]:::proc --> S1
+  O[Online order]:::ext --> S2 --> SALE[Sale]:::proc --> DEC[Inventory decrease]:::proc
+  POS2[POS sale]:::ext --> DEC
+  R[Return]:::proc --> INSP{Inspection}:::dec
+  INSP -->|Resellable| S1
+  INSP -->|Damaged| S3
+  WT[Warehouse transfer]:::proc --> S5
+  </pre></div>
+</section>
+
+<section class="block" id="s6">
+  <h2><span class="num">6</span>Multi-warehouse / multi-branch</h2>
+  <p class="desc">Each location keeps its own stock ledger; transfers between locations require approval before the source decrements and destination increments.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  BIZ[Business]:::actor --> W1[Main warehouse]:::store
+  BIZ --> W2[Dhaka branch]:::store
+  BIZ --> W3[Chittagong branch]:::store
+  BIZ --> W4[Physical shop]:::store
+  W1 -->|Transfer request| APR{Approval}:::dec
+  APR -->|Approved| DEC2[Source stock decrease]:::proc
+  DEC2 --> INC2[Destination stock increase]:::proc
+  </pre></div>
+</section>
+
+<section class="block" id="s7">
+  <h2><span class="num">7</span>Omnichannel sales → central order engine</h2>
+  <p class="desc">Every channel — Facebook, Messenger, WhatsApp, website, phone, POS, manual entry, API — feeds one standardized order record. There are no separate order systems per channel.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart LR
+  FB2[Facebook]:::ext --> CORE[(Central order engine)]:::store
+  MSG2[Messenger]:::ext --> CORE
+  WA2[WhatsApp]:::ext --> CORE
+  WEB2[Website]:::ext --> CORE
+  PHONE2[Phone]:::ext --> CORE
+  SHOP[Physical shop / POS]:::ext --> CORE
+  MAN[Manual order]:::ext --> CORE
+  API2[API]:::ext --> CORE
+  CORE --> STD["Standardized order<br/>ID, customer, items, price, status, courier, tracking"]:::proc
+  </pre></div>
+</section>
+
+<section class="block" id="s8">
+  <h2><span class="num">8</span>Customer lifecycle &amp; segmentation</h2>
+  <p class="desc">Every order updates the customer's profile and rolls up into an automatic segment used across marketing, risk scoring and AI.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  C1[Customer]:::actor --> C2[Browse / contact business]:::proc
+  C2 --> C3[Place order]:::proc
+  C3 --> C4[Customer profile created / updated]:::store
+  C4 --> C5[Order history updated]:::store
+  C5 --> C6[Customer statistics updated]:::store
+  C6 --> CLASS{Classification}:::dec
+  CLASS --> N1[New]:::proc
+  CLASS --> N2[Returning]:::proc
+  CLASS --> N3[VIP]:::proc
+  CLASS --> N4[Inactive]:::proc
+  CLASS --> N5[High-risk COD]:::proc
+  </pre></div>
+</section>
+
+<section class="block" id="s9">
+  <h2><span class="num">9</span>Order processing lifecycle</h2>
+  <p class="desc">The full path from a placed order to a completed sale, plus the exception states that can break in at any stage.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  A1[Order received]:::proc --> A2[Order validation]:::proc
+  A2 --> A3[Check product availability]:::proc
+  A3 --> A4[Reserve inventory]:::store
+  A4 --> A5[Payment verification]:::proc
+  A5 --> A6[Order confirmation]:::proc
+  A6 --> A7[Picking]:::proc
+  A7 --> A8[Packing]:::proc
+  A8 --> A9[QR generation]:::proc
+  A9 --> A10[QR / product scan]:::proc
+  A10 --> A11[Package verification]:::dec
+  A11 --> A12[Ready for courier]:::proc
+  A12 --> A13[Courier selection]:::proc
+  A13 --> A14[Courier booking]:::ext
+  A14 --> A15[Tracking number generated]:::store
+  A15 --> A16[Courier pickup]:::ext
+  A16 --> A17[In transit]:::ext
+  A17 --> A18[Out for delivery]:::ext
+  A18 --> A19[Delivered]:::ext
+  A19 --> A20[Payment / COD settlement]:::proc
+  A20 --> A21[Order completed]:::proc
+  </pre></div>
+  <div class="diagram-wrap" style="margin-top:16px;"><pre class="mermaid">
+flowchart LR
+  E0[Order lifecycle]:::proc -.-> E1[Order cancelled]:::dec
+  E0 -.-> E2[Order failed]:::dec
+  E0 -.-> E3[Payment failed]:::dec
+  E0 -.-> E4[Out of stock]:::dec
+  E0 -.-> E5[Customer refused]:::dec
+  E0 -.-> E6[Delivery failed]:::dec
+  E0 -.-> E7[Return requested]:::dec
+  </pre></div>
+</section>
+
+<section class="block" id="s10">
+  <h2><span class="num">10</span>QR packaging workflow</h2>
+  <p class="desc">Every package gets a unique QR that a warehouse worker scans, then verifies against scanned product barcodes before it is cleared for courier handoff.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  Q1[Order confirmed]:::proc --> Q2[Generate unique package QR]:::proc
+  Q2 --> Q3[Warehouse worker opens packing task]:::actor
+  Q3 --> Q4[Scan QR]:::proc
+  Q4 --> Q5["System displays order details<br/>customer, address, items, COD amount"]:::store
+  Q5 --> Q6[Worker scans product barcode / QR]:::proc
+  Q6 --> Q7{Expected vs scanned match?}:::dec
+  Q7 -->|Correct| Q8[Package verified]:::proc
+  Q8 --> Q9[Packaging completed]:::proc
+  Q9 --> Q10[Ready for courier]:::proc
+  Q7 -->|Incorrect| Q11[Package mismatch alert]:::dec
+  Q11 --> Q12[Fix package]:::proc
+  Q12 --> Q6
+  </pre></div>
+</section>
+
+<section class="block" id="s11">
+  <h2><span class="num">11</span>Payment workflow</h2>
+  <p class="desc">Online payments settle through a gateway immediately; COD collects cash at delivery and settles back through the courier.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  P1[Order]:::proc --> P2{Payment method}:::dec
+  P2 -->|Online payment| P3[Payment gateway]:::ext
+  P3 --> P4[Payment verification]:::proc
+  P4 --> P5[Paid]:::proc
+  P2 -->|COD| P6[Calculate COD amount]:::proc
+  P6 --> P7[Courier delivery]:::ext
+  P7 --> P8[Cash collected]:::proc
+  P8 --> P9[Courier settlement]:::ext
+  P9 --> P10[Business account]:::store
+  </pre></div>
+</section>
+
+<section class="block" id="s12">
+  <h2><span class="num">12</span>Bangladesh courier layer</h2>
+  <p class="desc">A courier abstraction layer compares multiple providers on price, speed and success rate, then recommends one for owner approval before booking.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  CO1[BusinessOS]:::proc --> CO2[(Courier service layer)]:::store
+  CO2 --> CA[Courier A]:::ext
+  CO2 --> CB[Courier B]:::ext
+  CO2 --> CC[Courier C]:::ext
+  PK[Package ready]:::proc --> GET[Get courier options]:::proc
+  GET --> CMP{"Compare couriers<br/>price, time, success rate"}:::dec
+  CMP --> REC[Recommended courier]:::ai
+  REC --> OA[Owner approval]:::actor
+  OA --> CS[Create shipment]:::proc
+  CS --> CAPI[Courier API]:::ext
+  CAPI --> TRK[Tracking number]:::store
+  TRK --> PU[Pickup]:::ext
+  PU --> DEL[Delivery]:::ext
+  </pre></div>
+</section>
+
+<section class="block" id="s13">
+  <h2><span class="num">13</span>Return workflow &amp; policy</h2>
+  <p class="desc">Approved returns are inspected and routed back into available or damaged stock; every return updates order, inventory, customer, finance and analytics together.</p>
+  <div class="two-col">
+    <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  R1[Customer]:::actor --> R2[Return request]:::proc
+  R2 --> R3[Return reason]:::proc
+  R3 --> R4{Merchant review}:::dec
+  R4 -->|Reject| R5[Request rejected]:::proc
+  R4 -->|Approve| R6[Courier pickup]:::ext
+  R6 --> R7[Return received]:::proc
+  R7 --> R8{Product inspection}:::dec
+  R8 -->|Resellable| R9[Available inventory]:::store
+  R8 -->|Damaged| R10[Damaged inventory]:::store
+  R9 --> R11{Refund or exchange}:::dec
+  R10 --> R11
+  R11 --> R12[Update order, inventory, customer, finance, analytics]:::store
+    </pre></div>
+    <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  RP1[Owner]:::actor --> RP2[Return policy settings]:::proc
+  RP2 --> RP3["Window, exchange, refund, conditions"]:::proc
+  RP3 --> RP4[BusinessOS generates return policy]:::ai
+  RP4 --> RP5["Displayed on website, product page,<br/>checkout, invoice, order page"]:::proc
+    </pre></div>
+  </div>
+</section>
+
+<section class="block" id="s14">
+  <h2><span class="num">14</span>POS workflow</h2>
+  <p class="desc">In-store sales run through the exact same order engine and inventory ledger as online sales — there is no separate POS database.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  PO1[Customer enters shop]:::actor --> PO2[Cashier]:::actor
+  PO2 --> PO3[Barcode scan]:::proc
+  PO3 --> PO4[Product added to cart]:::proc
+  PO4 --> PO5[Quantity & discount]:::proc
+  PO5 --> PO6[Payment]:::proc
+  PO6 --> PO7[Invoice]:::proc
+  PO7 --> PO8[(Order created in central order engine)]:::store
+  PO8 --> PO9[Inventory updated]:::store
+  PO9 --> PO10[Customer history updated]:::store
+  PO10 --> PO11[Finance & analytics updated]:::store
+  </pre></div>
+</section>
+
+<section class="block" id="s15">
+  <h2><span class="num">15</span>Supplier &amp; purchase workflow</h2>
+  <p class="desc">Low stock automatically triggers a reorder recommendation that the owner approves before it becomes a purchase order.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  SU1[Inventory monitoring]:::proc --> SU2[Low stock]:::dec
+  SU2 --> SU3[Reorder recommendation]:::ai
+  SU3 --> SU4[Owner approval]:::actor
+  SU4 --> SU5[Purchase order]:::proc
+  SU5 --> SU6[Supplier]:::ext
+  SU6 --> SU7[Goods received]:::proc
+  SU7 --> SU8[Inventory updated]:::store
+  SU8 --> SU9[Supplier payment recorded]:::store
+  </pre></div>
+</section>
+
+<section class="block" id="s16">
+  <h2><span class="num">16</span>Finance workflow</h2>
+  <p class="desc">Every cost and revenue stream — sales, product cost, expenses, courier fees, gateway fees, refunds, supplier payments, COD settlements — feeds one financial engine.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  F1[Sales]:::ext --> FE[(Financial engine)]:::store
+  F2[Product costs]:::ext --> FE
+  F3[Expenses]:::ext --> FE
+  F4[Courier fees]:::ext --> FE
+  F5[Payment fees]:::ext --> FE
+  F6[Refunds]:::ext --> FE
+  F7[Supplier payments]:::ext --> FE
+  F8[COD settlements]:::ext --> FE
+  FE --> FR[Revenue]:::proc
+  FE --> FX[Expenses]:::proc
+  FE --> FP[Estimated profit]:::proc
+  FP --> FRP[Financial reports]:::store
+  </pre></div>
+</section>
+
+<section class="block" id="s17">
+  <h2><span class="num">17</span>Employee roles &amp; audit log</h2>
+  <p class="desc">Every action is permission-gated by role, and every sensitive change is written to an immutable audit trail.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  EM1[Owner]:::actor --> EM2[Employees]:::proc
+  EM2 --> EM3{Roles}:::dec
+  EM3 --> R1b[Manager]:::proc
+  EM3 --> R2b[Cashier]:::proc
+  EM3 --> R3b[Warehouse worker]:::proc
+  EM3 --> R4b[Packing worker]:::proc
+  EM3 --> R5b[Accountant]:::proc
+  EM3 --> R6b[Marketing manager]:::proc
+  EA[Employee action]:::actor --> PC{Permission check}:::dec
+  PC -->|Allowed| EX[Execute]:::proc
+  PC -->|Denied| DA[Access denied]:::proc
+  EX --> AL[(Audit log: user, action, timestamp, old/new value)]:::store
+  </pre></div>
+</section>
+
+<section class="block" id="s18">
+  <h2><span class="num">18</span>Notification system</h2>
+  <p class="desc">A central notification engine fans key events out to owner, employee and customer across in-app, SMS, email and WhatsApp.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  EV["Order & inventory events<br/>new order, low stock, delivered, refund"]:::proc --> NE[(Notification engine)]:::store
+  NE --> ON[Owner notification]:::proc
+  NE --> EN[Employee notification]:::proc
+  NE --> CN[Customer notification]:::proc
+  ON --> CH1[In-app]:::ext
+  ON --> CH2[SMS]:::ext
+  ON --> CH3[Email]:::ext
+  ON --> CH4[WhatsApp]:::ext
+  </pre></div>
+</section>
+
+<section class="block" id="s19">
+  <h2><span class="num">19</span>Marketing module</h2>
+  <p class="desc">Customer segments drive targeted campaigns, coupons and offers, and every resulting purchase feeds back into analytics.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  M1[Customer data]:::store --> M2{Segmentation}:::dec
+  M2 --> M3[VIP]:::proc
+  M2 --> M4[New]:::proc
+  M2 --> M5[Inactive]:::proc
+  M2 --> M6[Returning]:::proc
+  M2 --> M7[High value]:::proc
+  M3 --> M8[Marketing campaign]:::ai
+  M4 --> M8
+  M5 --> M8
+  M6 --> M8
+  M7 --> M8
+  M8 --> M9[Coupon / discount / offer]:::proc
+  M9 --> M10[Customer notification]:::ext
+  M10 --> M11[Purchase]:::proc
+  M11 --> M12[Analytics]:::store
+  </pre></div>
+</section>
+
+<section class="block" id="s20">
+  <h2><span class="num">20</span>Analytics module</h2>
+  <p class="desc">Analytics span sales, product, inventory, customer, courier, returns, finance and channel performance in one engine.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TB
+  AN[Analytics engine]:::store --> AN1[Sales analytics]:::proc
+  AN --> AN2[Product analytics]:::proc
+  AN --> AN3[Inventory analytics]:::proc
+  AN --> AN4[Customer analytics]:::proc
+  AN --> AN5[Courier & return analytics]:::proc
+  AN --> AN6["Channel analytics<br/>Facebook, website, POS, phone"]:::proc
+  AN --> AN7[Finance analytics]:::proc
+  </pre></div>
+</section>
+
+<section class="block" id="s21">
+  <h2><span class="num">21</span>AI business engine &amp; assistant</h2>
+  <p class="desc">The AI layer reads across orders, products, inventory, customers, courier and finance to power forecasting, risk scoring and a conversational assistant the owner can question directly.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  D1[Orders]:::store --> AIC[(AI business engine)]:::ai
+  D2[Products]:::store --> AIC
+  D3[Inventory]:::store --> AIC
+  D4[Customers]:::store --> AIC
+  D5[Courier]:::store --> AIC
+  D6[Finance]:::store --> AIC
+  AIC --> F11[Demand forecasting]:::proc
+  AIC --> F22[COD risk prediction]:::proc
+  AIC --> F33[Courier recommendation]:::proc
+  AIC --> F44[Anomaly detection]:::proc
+  AIC --> F55[Restocking recommendation]:::proc
+  OW[Owner]:::actor --> ASK[AI business assistant]:::ai
+  ASK -->|Ask a business question| AIC
+  AIC -->|Plain-language answer| OW
+  </pre></div>
+</section>
+
+<section class="block" id="s22">
+  <h2><span class="num">22</span>Reporting module</h2>
+  <p class="desc">Every module can generate an exportable report in PDF, CSV or Excel.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart LR
+  RM[Reporting module]:::proc --> RP1b[Sales report]:::store
+  RM --> RP2b[Inventory report]:::store
+  RM --> RP3b[Customer report]:::store
+  RM --> RP4b[Finance report]:::store
+  RM --> RP5b[Employee activity report]:::store
+  RP1b --> EXP{Export}:::dec
+  EXP --> PDF[PDF]:::ext
+  EXP --> CSV[CSV]:::ext
+  EXP --> XLS[Excel]:::ext
+  </pre></div>
+</section>
+
+<section class="block" id="s23">
+  <h2><span class="num">23</span>Platform admin panel</h2>
+  <p class="desc">Platform administrators manage the business of the platform itself — tenants, subscriptions, integrations, system health — without unrestricted access to merchant data.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  PA[Platform administrator]:::actor --> AD1[Businesses]:::proc
+  PA --> AD2[Users & subscriptions]:::proc
+  PA --> AD3[Platform revenue]:::proc
+  PA --> AD4[Courier & payment integrations]:::proc
+  PA --> AD5[System health & security]:::proc
+  PA --> AD6[Platform analytics]:::proc
+  AD1 -. restricted access .-> MB[(Merchant business data)]:::store
+  </pre></div>
+</section>
+
+<section class="block" id="s24">
+  <h2><span class="num">24</span>Subscription system</h2>
+  <p class="desc">Business type and plan tier together determine feature access and usage limits — products, orders, employees, warehouses, AI usage.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  SB[Business]:::actor --> SP{Select plan}:::dec
+  SP --> SPO[Online]:::proc
+  SP --> SPF[Offline]:::proc
+  SP --> SPB[Online + offline]:::proc
+  SPO --> ST{Plan tier}:::dec
+  SPF --> ST
+  SPB --> ST
+  ST --> TB[Basic]:::proc
+  ST --> TP[Professional]:::proc
+  ST --> TE[Enterprise]:::proc
+  TB --> SPAY[Subscription payment]:::ext
+  TP --> SPAY
+  TE --> SPAY
+  SPAY --> FA[Feature access & usage limits]:::store
+  </pre></div>
+</section>
+
+<section class="block" id="s25">
+  <h2><span class="num">25</span>Complete data flow</h2>
+  <p class="desc">The backbone chain that every transaction updates automatically, end to end.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart LR
+  PR[Product]:::store --> IN[Inventory]:::store --> OR[Order]:::store --> CU2[Customer]:::store --> PA2[Payment]:::store --> PK2[Packaging]:::proc --> QR2[QR]:::proc --> CR2[Courier]:::ext --> DL[Delivery]:::ext --> SE[Settlement]:::proc --> FI2[Finance]:::store --> ANL[Analytics]:::store --> AIF[AI]:::ai
+  </pre></div>
+</section>
+
+<section class="block" id="s26">
+  <h2><span class="num">26</span>Multi-tenant architecture</h2>
+  <p class="desc">Every business operates in a fully isolated workspace, partitioned by tenant ID throughout the stack — Business A can never see Business B's data.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  PL[Platform]:::store --> BA[Business A]:::proc
+  PL --> BB[Business B]:::proc
+  PL --> BC[Business C]:::proc
+  BA --> BA1["Users, products, orders,<br/>customers, inventory, finance"]:::store
+  BB --> BB1["Users, products, orders,<br/>customers, inventory, finance"]:::store
+  BC --> BC1["Users, products, orders,<br/>customers, inventory, finance"]:::store
+  </pre></div>
+</section>
+
+<section class="block" id="s27">
+  <h2><span class="num">27</span>Technical architecture</h2>
+  <p class="desc">A modular monolith to start, with clean module boundaries so high-load components — order processing, AI, courier integration — can split into services later.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TB
+  FE2["Frontend<br/>React, Vite, Tailwind CSS"]:::proc --> BE2["Backend<br/>Node.js, NestJS / Express"]:::proc
+  BE2 --> DBs[(PostgreSQL)]:::store
+  BE2 --> CA2[(Redis cache)]:::store
+  BE2 --> ST2[(Object storage)]:::store
+  BE2 --> Q2[(Queue / worker jobs)]:::store
+  BE2 --> AISV["AI service<br/>Python / FastAPI"]:::ai
+  BE2 --> EXT2["External APIs<br/>payment, courier, Meta, SMS/Email"]:::ext
+  </pre></div>
+</section>
+
+<section class="block" id="s28">
+  <h2><span class="num">28</span>Master flow — order to delivery</h2>
+  <p class="desc">The single highlighted flow the whole platform is built around: a customer's intent becomes revenue, inventory truth, and an AI insight, no matter which door they walked in through.</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart TD
+  X1[Customer]:::actor --> X2["Facebook / website / phone / POS"]:::ext
+  X2 --> X3[Central order engine]:::store
+  X3 --> X4[Customer validation]:::proc
+  X4 --> X5[Inventory check & reservation]:::store
+  X5 --> X6[Payment]:::proc
+  X6 --> X7[Order confirmation]:::proc
+  X7 --> X8[Picking & packaging]:::proc
+  X8 --> X9[QR generation & scan verification]:::proc
+  X9 --> X10[Courier selection & booking]:::ext
+  X10 --> X11["Pickup → in transit → out for delivery"]:::ext
+  X11 --> X12[Delivered]:::ext
+  X12 --> X13[COD settlement]:::proc
+  X13 --> X14["Finance, customer, inventory, analytics updated"]:::store
+  X14 --> X15[AI learning & insights]:::ai
+  </pre></div>
+  <p class="desc" style="margin-top:20px;">The offline path runs the same core loop with a shorter front end:</p>
+  <div class="diagram-wrap"><pre class="mermaid">
+flowchart LR
+  Y1[Customer enters shop]:::actor --> Y2[POS]:::ext --> Y3[Barcode scan]:::proc --> Y4[Payment]:::proc --> Y5[Invoice]:::proc --> Y6[Central order engine]:::store --> Y7[Inventory update]:::store --> Y8[Finance]:::store --> Y9[Customer]:::store --> Y10[Analytics]:::store
+  </pre></div>
+</section>
+
+</main>
+
+<footer>
+  BusinessOS — architecture &amp; workflow reference &middot; generated diagram document
+</footer>
+
+<script>
+mermaid.initialize({
+  startOnLoad: true,
+  theme: "base",
+  securityLevel: "loose",
+  flowchart: { curve: "basis", htmlLabels: true, padding: 12 },
+  themeVariables: {
+    darkMode: true,
+    background: "#161c29",
+    primaryColor: "#1b2333",
+    primaryTextColor: "#e7ebf3",
+    primaryBorderColor: "#5b8cff",
+    lineColor: "#5b6b85",
+    secondaryColor: "#1b2333",
+    tertiaryColor: "#1b2333",
+    fontFamily: "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif",
+    fontSize: "14px"
+  }
+});
+
+var styleTag = document.createElement("style");
+styleTag.innerHTML =
+  ".actor rect, .actor polygon, .actor path { fill:#1b2740 !important; stroke:#5b8cff !important; }" +
+  ".proc rect, .proc polygon, .proc path { fill:#221c3d !important; stroke:#8f7ee8 !important; }" +
+  ".dec polygon, .dec rect, .dec path { fill:#3a2c14 !important; stroke:#f2b84b !important; }" +
+  ".store rect, .store polygon, .store path { fill:#0f2e29 !important; stroke:#3ad0a8 !important; }" +
+  ".ext rect, .ext polygon, .ext path { fill:#3a2019 !important; stroke:#f0846a !important; }" +
+  ".ai rect, .ai polygon, .ai path { fill:#3a1c2c !important; stroke:#e26ba0 !important; }" +
+  ".mermaid .nodeLabel, .mermaid .label, .mermaid text { fill:#e7ebf3 !important; color:#e7ebf3 !important; }" +
+  ".mermaid .edgeLabel { background-color:#161c29 !important; color:#c7cede !important; }" +
+  ".mermaid .edgeLabel p { background-color:#161c29 !important; color:#c7cede !important; }";
+document.head.appendChild(styleTag);
+
+var sections = document.querySelectorAll("section.block");
+var tocGrid = document.getElementById("tocGrid");
+sections.forEach(function(sec){
+  var title = sec.querySelector("h2").textContent.replace(/^\d+/, "").trim();
+  var a = document.createElement("a");
+  a.href = "#" + sec.id;
+  a.textContent = title;
+  tocGrid.appendChild(a);
+});
+</script>
+
+</body>
+</html>

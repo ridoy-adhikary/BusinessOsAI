@@ -1,0 +1,158 @@
+BUSINESSOS STACK OVERVIEW
+=========================
+
+Project: BusinessOS
+
+
+ARCHITECTURE
+------------
+
+BUSINESSOS
+    |
+    +-- FRONTEND
+    |       |
+    |       +-- React + TypeScript
+    |       +-- Vite
+    |       +-- Tailwind CSS
+    |       +-- React Router
+    |       +-- TanStack Query
+    |       +-- Zustand
+    |
+    +-- BACKEND
+    |       |
+    |       +-- Node.js + TypeScript
+    |       +-- NestJS
+    |       +-- PostgreSQL
+    |       +-- Prisma
+    |       +-- Redis
+    |       +-- BullMQ
+    |
+    +-- API
+            |
+            +-- Connects the frontend and backend
+            +-- Exposes backend functionality to clients
+            +-- Coordinates external integrations
+
+
+FRONTEND STACK
+--------------
+
+React + TypeScript
+    Builds the user interface with type-safe application code.
+
+Vite
+    Provides frontend development tooling, fast startup, and production builds.
+
+Tailwind CSS
+    Provides utility-first styling for the user interface.
+
+React Router
+    Handles client-side navigation and application routes.
+
+TanStack Query
+    Manages server state, API requests, caching, loading states, and refetching.
+
+Zustand
+    Manages lightweight client-side application state.
+
+
+BACKEND STACK
+-------------
+
+Node.js + TypeScript
+    Runs the server and provides type-safe backend code.
+
+NestJS
+    Provides the backend framework, modules, controllers, services, and dependency injection.
+
+PostgreSQL
+    Main relational database for persistent application data.
+
+Prisma
+    Database ORM used to access PostgreSQL and manage the data model.
+
+Redis
+    In-memory data store for caching, temporary data, and queue support.
+
+BullMQ
+    Job and task queue system backed by Redis for asynchronous processing.
+
+
+API LAYER
+---------
+
+The API is the communication layer between the frontend and backend.
+
+Typical flow:
+    1. A user interacts with the React frontend.
+    2. TanStack Query sends a request to the backend API.
+    3. NestJS receives and validates the request.
+    4. Backend services process the business logic.
+    5. Prisma reads from or writes to PostgreSQL.
+    6. Redis or BullMQ handles caching and background jobs when needed.
+    7. The API returns a response to the frontend.
+
+
+EXTERNAL INTEGRATIONS
+---------------------
+
+The backend API connects to external services through integration modules.
+
+Payment Gateway
+    Processes payments and payment-related events.
+
+Courier APIs
+    Integrates with delivery and logistics providers.
+
+Meta APIs
+    Connects to Meta services such as Facebook or Instagram APIs.
+
+SMS/Email APIs
+    Sends notifications, verification codes, alerts, and transactional messages.
+
+AI Python
+    Provides AI-related processing through Python services or scripts.
+
+
+HIGH-LEVEL DATA FLOW
+--------------------
+
+User
+  -> React frontend
+  -> API
+  -> NestJS backend
+  -> Prisma
+  -> PostgreSQL
+
+For asynchronous work:
+
+NestJS backend
+  -> BullMQ
+  -> Redis
+  -> Background worker
+  -> External service or database
+
+For third-party services:
+
+NestJS backend
+  -> Integration module
+  -> Payment / Courier / Meta / SMS / Email / AI service
+  -> API response or background job result
+
+
+STACK SUMMARY
+-------------
+
+Frontend:       React, TypeScript, Vite, Tailwind CSS, React Router,
+                TanStack Query, Zustand
+
+Backend:        Node.js, TypeScript, NestJS
+
+Database:       PostgreSQL, Prisma
+
+Caching:        Redis
+
+Queues:         BullMQ
+
+Integrations:   Payment Gateway, Courier APIs, Meta APIs, SMS/Email APIs,
+                Python AI services
