@@ -18,16 +18,36 @@ const columns = [
 
 export function LandingFooter() {
   return (
-    <footer id="about" className="scroll-mt-24 border-t border-slate-200/70 bg-white/60 backdrop-blur-sm">
+    <footer id="about" className="scroll-mt-24 bg-white/60 backdrop-blur-sm">
+      {/* Footer stats bar */}
+      <div className="mx-[calc(-50vw+50%)] w-screen border-t border-slate-200">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-6 py-5 sm:flex-row">
+          <div className="flex items-center gap-2.5">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
+            </span>
+            <span className="text-sm font-medium text-slate-500">14 people viewing now</span>
+          </div>
+          <div className="flex flex-col items-center gap-1 text-right sm:flex-row sm:items-center sm:gap-3">
+            <span className="text-xs text-slate-400">powered by useclick.io</span>
+            <span className="text-xs text-slate-400">Your cyber performance partner</span>
+            <span className="text-sm font-bold tracking-tight text-slate-700">
+              MCO<sup>®</sup> REF
+            </span>
+          </div>
+        </div>
+      </div>
+
       <div className="mx-auto max-w-7xl px-6 py-14">
         <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
           <div>
             <Link to={paths.home} className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 text-sm font-bold text-white">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-accent-400 text-sm font-bold text-white shadow-lg purple-glow">
                 B
               </span>
               <span className="text-lg font-bold tracking-tight text-slate-900">
-                Business<span className="text-brand-600">OS</span>
+                Business<span className="gradient-text">OS</span>
               </span>
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-500">
@@ -56,7 +76,7 @@ export function LandingFooter() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-slate-200/70 pt-6 sm:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/50 pt-6 sm:flex-row">
           <p className="text-xs text-slate-400">
             © {new Date().getFullYear()} BusinessOS. All rights reserved.
           </p>

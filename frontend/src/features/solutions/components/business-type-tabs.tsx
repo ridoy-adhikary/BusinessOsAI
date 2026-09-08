@@ -170,7 +170,7 @@ export function BusinessTypeTabs() {
   return (
     <section className="mt-16 sm:mt-20">
       <Reveal>
-        <div className="mx-auto flex max-w-2xl flex-col items-center gap-3 rounded-3xl border border-slate-200/80 bg-white/85 p-2 shadow-lg shadow-brand-500/5 backdrop-blur-md sm:flex-row">
+        <div className="mx-auto flex max-w-2xl flex-col items-center gap-3 rounded-3xl border border-white/60 bg-white/80 p-2 shadow-lg shadow-brand-500/10 backdrop-blur-md sm:flex-row">
           {solutions.map((solution) => (
             <button
               key={solution.id}
@@ -180,7 +180,7 @@ export function BusinessTypeTabs() {
               className={cn(
                 "flex flex-1 items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold transition-all duration-300",
                 activeId === solution.id
-                  ? "bg-brand-500 text-white shadow-md shadow-brand-500/30"
+                  ? "bg-gradient-to-r from-brand-500 to-accent-500 text-white shadow-md purple-glow"
                   : "text-slate-600 hover:bg-brand-50 hover:text-brand-700",
               )}
             >
@@ -193,23 +193,26 @@ export function BusinessTypeTabs() {
 
       <div
         key={active.id}
-        className="animate-fade-up mx-auto mt-6 max-w-7xl rounded-3xl border border-slate-200/80 bg-white/90 p-6 shadow-xl shadow-brand-500/10 backdrop-blur-md sm:p-10"
+        className="animate-fade-up mx-auto mt-6 max-w-7xl rounded-3xl border border-white/60 bg-white/90 p-6 shadow-xl shadow-brand-500/10 backdrop-blur-md sm:p-10"
       >
-        <div className="flex items-start gap-4">
-          <span className="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 p-3 text-white shadow-lg shadow-brand-500/30">
-            <active.icon className="h-6 w-6" />
-          </span>
-          <div>
-            <h3 className="text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">
-              {active.headline}
-            </h3>
-            <p className="mt-2.5 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
-              {active.description}
-            </p>
+        <div className="relative">
+          <div className="pointer-events-none absolute -top-10 -right-10 h-48 w-48 rounded-full bg-brand-500/10 blur-3xl" />
+          <div className="flex items-start gap-4">
+            <span className="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-accent-400 p-3 text-white shadow-lg purple-glow">
+              <active.icon className="h-6 w-6" />
+            </span>
+            <div>
+              <h3 className="text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">
+                {active.headline}
+              </h3>
+              <p className="mt-2.5 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
+                {active.description}
+              </p>
+            </div>
           </div>
         </div>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-2">
+        <div className="relative mt-8 grid gap-8 lg:grid-cols-2">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-widest text-brand-600">
               How it works
@@ -217,7 +220,7 @@ export function BusinessTypeTabs() {
             <ol className="relative mt-4 space-y-4 border-l-2 border-dashed border-brand-200 pl-6">
               {active.workflow.map((step, index) => (
                 <li key={step} className="relative">
-                  <span className="absolute -left-[31px] flex h-6 w-6 items-center justify-center rounded-full bg-brand-500 text-[11px] font-bold text-white ring-4 ring-white">
+                  <span className="absolute -left-[31px] flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-accent-500 text-[11px] font-bold text-white ring-4 ring-white">
                     {index + 1}
                   </span>
                   <p className="pt-0.5 text-sm font-medium text-slate-700">{step}</p>
@@ -228,7 +231,7 @@ export function BusinessTypeTabs() {
             <div className="mt-8 grid grid-cols-3 divide-x divide-slate-200 rounded-2xl border border-slate-100 bg-slate-50/60 py-4">
               {active.stats.map((stat) => (
                 <div key={stat.label} className="px-3 text-center">
-                  <p className="text-2xl font-extrabold tracking-tight text-brand-600">
+                  <p className="text-2xl font-extrabold tracking-tight gradient-text">
                     {stat.value}
                   </p>
                   <p className="mt-0.5 text-[11px] font-medium leading-snug text-slate-500">
@@ -243,7 +246,7 @@ export function BusinessTypeTabs() {
             {active.capabilities.map((capability) => (
               <div
                 key={capability.title}
-                className="feature-card rounded-2xl border border-slate-200/80 bg-white p-5"
+                className="feature-card rounded-2xl border border-slate-200/80 bg-white p-5 transition-all duration-300 hover:border-brand-300 hover:bg-brand-50/40"
               >
                 <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-100">
                   <capability.icon className="h-4.5 w-4.5" />

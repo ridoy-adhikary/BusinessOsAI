@@ -12,17 +12,17 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "flex h-screen shrink-0 flex-col border-r border-slate-200 bg-white transition-[width] duration-200",
+        "flex h-screen shrink-0 flex-col border-r border-white/60 bg-white/70 backdrop-blur-xl transition-[width] duration-200",
         collapsed ? "w-16" : "w-60",
       )}
     >
-      <Link to={paths.dashboard} className="flex h-14 items-center gap-2 border-b border-slate-200 px-4">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 text-sm font-bold text-white shadow-md shadow-brand-500/30">
+      <Link to={paths.dashboard} className="flex h-14 items-center gap-2 border-b border-white/60 px-4">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-accent-400 text-sm font-bold text-white shadow-lg purple-glow">
           B
         </div>
         {!collapsed && (
           <span className="truncate text-base font-bold tracking-tight text-slate-900">
-            Business<span className="text-brand-600">OS</span>
+            Business<span className="gradient-text">OS</span>
           </span>
         )}
       </Link>
@@ -44,8 +44,9 @@ export function Sidebar() {
                     title={collapsed ? item.label : undefined}
                     className={({ isActive }) =>
                       cn(
-                        "flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm text-slate-600 hover:bg-slate-100",
-                        isActive && "bg-blue-50 font-medium text-blue-700",
+                        "flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm text-slate-600 transition-colors hover:bg-brand-50 hover:text-brand-700",
+                        isActive &&
+                          "bg-gradient-to-r from-brand-500 to-accent-500 font-medium text-white shadow-md purple-glow",
                         collapsed && "justify-center",
                       )
                     }
@@ -63,7 +64,7 @@ export function Sidebar() {
       <button
         type="button"
         onClick={toggle}
-        className="flex h-10 items-center justify-center border-t border-slate-200 text-slate-400 hover:text-slate-600"
+        className="flex h-10 items-center justify-center border-t border-white/60 text-slate-400 hover:text-brand-600"
         aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
         {collapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}

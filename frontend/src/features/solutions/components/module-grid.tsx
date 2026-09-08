@@ -63,7 +63,7 @@ export function ModuleGrid() {
             Modular building blocks
           </p>
           <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-            Every solution, one shared core
+            Every solution, <span className="gradient-text">one shared core</span>
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-pretty text-base text-slate-600">
             Modules aren&apos;t bolt-ons — they share a single data spine, so a sale anywhere
@@ -75,8 +75,8 @@ export function ModuleGrid() {
       <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {modules.map((module, i) => (
           <Reveal key={module.title} delay={i * 100}>
-            <article className="feature-card h-full rounded-3xl border border-slate-200/80 bg-white/85 p-6 backdrop-blur-sm">
-              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 ring-1 ring-brand-100 transition-colors hover:bg-brand-500 hover:text-white">
+            <article className="feature-card group h-full rounded-3xl border border-white/60 bg-white/80 p-6 backdrop-blur-sm">
+              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-50 to-accent-50 text-brand-600 ring-1 ring-brand-100 transition-all duration-300 group-hover:from-brand-500 group-hover:to-accent-500 group-hover:text-white group-hover:purple-glow">
                 <module.icon className="h-6 w-6" />
               </span>
               <h3 className="mt-5 text-lg font-bold text-slate-900">{module.title}</h3>

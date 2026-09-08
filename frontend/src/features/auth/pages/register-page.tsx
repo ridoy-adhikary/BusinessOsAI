@@ -33,14 +33,17 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-6 py-10">
-      <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/50">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden mixed-bg-deep px-6 py-10">
+      <div className="pointer-events-none absolute -top-40 -left-40 h-96 w-96 rounded-full bg-brand-500/15 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-accent-400/25 blur-3xl" />
+
+      <div className="relative w-full max-w-md rounded-3xl border border-white/60 bg-white/80 p-8 shadow-2xl shadow-brand-500/10 backdrop-blur-xl">
         <Link to={paths.home} className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 text-sm font-bold text-white">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-accent-400 text-sm font-bold text-white shadow-lg purple-glow">
             B
           </span>
           <span className="text-lg font-bold tracking-tight text-slate-900">
-            Business<span className="text-brand-600">OS</span>
+            Business<span className="gradient-text">OS</span>
           </span>
         </Link>
 
@@ -60,7 +63,7 @@ export function RegisterPage() {
               type="text"
               required
               placeholder="Rahim Uddin"
-              className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm outline-none focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-100"
+              className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 outline-none transition-all focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
             />
           </div>
           <div>
@@ -73,7 +76,7 @@ export function RegisterPage() {
               type="text"
               required
               placeholder="Dhaka Fashion House"
-              className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm outline-none focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-100"
+              className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 outline-none transition-all focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
             />
           </div>
           <div>
@@ -86,7 +89,7 @@ export function RegisterPage() {
               type="email"
               required
               placeholder="you@business.com"
-              className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm outline-none focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-100"
+              className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 outline-none transition-all focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
             />
           </div>
           <div>
@@ -100,7 +103,7 @@ export function RegisterPage() {
               required
               minLength={8}
               placeholder="Minimum 8 characters"
-              className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm outline-none focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-100"
+              className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 outline-none transition-all focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
             />
           </div>
 
@@ -129,7 +132,7 @@ export function RegisterPage() {
 
           <button
             type="submit"
-            className="h-11 w-full rounded-xl bg-brand-500 text-sm font-bold text-white shadow-lg shadow-brand-500/25 transition-all hover:-translate-y-0.5 hover:bg-brand-600"
+            className="h-11 w-full rounded-xl bg-gradient-to-r from-brand-500 to-accent-500 text-sm font-bold text-white shadow-lg purple-glow transition-all hover:-translate-y-0.5 hover:shadow-xl"
           >
             Continue to plans
           </button>

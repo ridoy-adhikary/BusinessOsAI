@@ -63,11 +63,15 @@ export function SubscribePage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 px-6 py-12">
-      <div className="mx-auto max-w-5xl">
+    <div className="relative min-h-screen overflow-hidden mixed-bg-deep px-6 py-12">
+      <div className="pointer-events-none absolute -top-40 -right-40 h-96 w-96 rounded-full bg-brand-500/15 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-accent-400/25 blur-3xl" />
+
+      <div className="relative mx-auto max-w-5xl">
         <div className="text-center">
           <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
-            Choose your plan, {user?.name?.split(" ")[0] ?? "there"}
+            Choose your plan,{" "}
+            <span className="gradient-text">{user?.name?.split(" ")[0] ?? "there"}</span>
           </h1>
           <p className="mx-auto mt-3 max-w-lg text-sm text-slate-500">
             Your dashboard unlocks immediately after selecting a plan. You can change or cancel
@@ -83,14 +87,14 @@ export function SubscribePage() {
               onClick={() => setSelected(plan.tier)}
               aria-pressed={selected === plan.tier}
               className={cn(
-                "relative flex h-full flex-col rounded-3xl border bg-white p-7 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-500/10",
+                "relative flex h-full flex-col rounded-3xl border bg-white/80 p-7 text-left backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-500/15",
                 selected === plan.tier
                   ? "border-brand-400 ring-2 ring-brand-200 shadow-lg shadow-brand-500/15"
                   : "border-slate-200",
               )}
             >
               {plan.highlighted && (
-                <span className="absolute -top-3.5 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 rounded-full bg-brand-500 px-3.5 py-1 text-xs font-bold text-white shadow-md shadow-brand-500/30">
+                <span className="absolute -top-3.5 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 rounded-full bg-gradient-to-r from-brand-500 to-accent-500 px-3.5 py-1 text-xs font-bold text-white shadow-md purple-glow">
                   <Sparkles className="h-3 w-3" />
                   Most Popular
                 </span>
@@ -109,7 +113,7 @@ export function SubscribePage() {
                 </span>
               </div>
               <p className="mt-4">
-                <span className="text-3xl font-extrabold tracking-tight text-slate-900">
+                <span className="text-3xl font-extrabold tracking-tight gradient-text">
                   {plan.price}
                 </span>
                 <span className="ml-2 text-xs font-medium text-slate-400">{plan.period}</span>
@@ -117,7 +121,7 @@ export function SubscribePage() {
               <ul className="mt-5 flex-1 space-y-2 border-t border-dashed border-slate-200 pt-5">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-2 text-sm text-slate-600">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-500" />
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent-500" />
                     {feature}
                   </li>
                 ))}
@@ -130,7 +134,7 @@ export function SubscribePage() {
           <button
             type="button"
             onClick={handleSubscribe}
-            className="rounded-xl bg-brand-500 px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand-500/30 transition-all hover:-translate-y-0.5 hover:bg-brand-600"
+            className="rounded-xl bg-gradient-to-r from-brand-500 to-accent-500 px-8 py-3.5 text-sm font-bold text-white shadow-lg purple-glow transition-all hover:-translate-y-0.5 hover:shadow-xl"
           >
             Activate workspace
           </button>

@@ -7,7 +7,7 @@ export function CtaBand() {
   return (
     <section className="mt-24 sm:mt-28">
       <Reveal>
-        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-r from-brand-500 to-brand-700 px-8 py-14 text-center shadow-2xl shadow-brand-500/30 sm:px-16">
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-r from-brand-500 to-accent-500 px-8 py-14 text-center shadow-2xl purple-glow sm:px-16">
           <div
             className="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl"
             aria-hidden="true"

@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { Check, Sparkles } from "lucide-react";
+import { useRef } from "react";
 import { cn } from "@/lib/utils";
-import { Reveal } from "@/components/common/reveal";
+import { useGsapReveal } from "@/hooks/use-gsap-reveal";
 import type { PlanTier } from "@/types";
 import { paths } from "@/routes/paths";
 
@@ -63,33 +64,34 @@ const tiers: Tier[] = [
 ];
 
 export function PricingSection() {
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  useGsapReveal(sectionRef, { y: 40, stagger: 0.15 });
+
   return (
     <section id="pricing" className="scroll-mt-24">
-      <Reveal>
-        <div className="text-center">
+      <div ref={sectionRef}>
+        <div data-gsap className="text-center">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-600">Pricing</p>
           <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-            Simple, Scalable Pricing
+            Simple, <span className="gradient-text">Scalable Pricing</span>
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-pretty text-base text-slate-600">
             Start free. Upgrade when your business does. Every plan runs on the same unified core.
           </p>
         </div>
-      </Reveal>
 
-      <div className="mx-auto mt-12 grid max-w-5xl gap-6 lg:grid-cols-3">
-        {tiers.map((tier, i) => (
-          <Reveal key={tier.name} delay={i * 120} className="h-full">
+        <div className="mx-auto mt-12 grid max-w-5xl gap-6 lg:grid-cols-3">
+          {tiers.map((tier) => (
             <article
+              key={tier.name}
+              data-gsap
               className={cn(
-                "relative flex h-full flex-col rounded-3xl border bg-white/90 p-7 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-brand-500/10",
-                tier.highlighted
-                  ? "border-brand-400 shadow-lg shadow-brand-500/15 ring-2 ring-brand-200"
-                  : "border-slate-200/80",
+                "relative flex h-full flex-col rounded-3xl border bg-white/80 p-7 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-brand-500/15",
+                tier.highlighted && "border-brand-400 ring-2 ring-brand-200 shadow-lg shadow-brand-500/15",
               )}
             >
               {tier.highlighted && (
-                <span className="absolute -top-3.5 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 rounded-full bg-brand-500 px-3.5 py-1 text-xs font-bold text-white shadow-md shadow-brand-500/30">
+                <span className="absolute -top-3.5 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 rounded-full bg-gradient-to-r from-brand-500 to-accent-500 px-3.5 py-1 text-xs font-bold text-white shadow-md purple-glow">
                   <Sparkles className="h-3 w-3" />
                   Most Popular
                 </span>
@@ -97,7 +99,7 @@ export function PricingSection() {
               <h3 className="text-base font-bold text-slate-900">{tier.name}</h3>
               <p className="mt-1 text-sm text-slate-500">{tier.tagline}</p>
               <p className="mt-5">
-                <span className="text-4xl font-extrabold tracking-tight text-slate-900">
+                <span className="text-4xl font-extrabold tracking-tight gradient-text">
                   {tier.price}
                 </span>
                 <span className="ml-2 text-sm font-medium text-slate-400">{tier.period}</span>
@@ -105,7 +107,7 @@ export function PricingSection() {
               <ul className="mt-6 flex-1 space-y-2.5 border-t border-dashed border-slate-200 pt-6">
                 {tier.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-2.5 text-sm text-slate-600">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-500" />
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent-500" />
                     {feature}
                   </li>
                 ))}
@@ -116,15 +118,15 @@ export function PricingSection() {
                 className={cn(
                   "mt-8 inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-bold transition-all hover:-translate-y-0.5",
                   tier.highlighted
-                    ? "bg-brand-500 text-white shadow-lg shadow-brand-500/30 hover:bg-brand-600"
-                    : "border border-slate-200 bg-white text-slate-800 hover:border-brand-300 hover:text-brand-700",
+                    ? "bg-gradient-to-r from-brand-500 to-accent-500 text-white shadow-lg purple-glow"
+                    : "border border-slate-200 bg-white text-slate-700 hover:border-brand-300 hover:text-brand-700",
                 )}
               >
-                {tier.tier === "enterprise" ? "Talk to Us" : "Start Free Trial"}
+                {tier.highlighted ? "Get Started" : tier.name === "Starter" ? "Start Free" : "Contact Sales"}
               </Link>
             </article>
-          </Reveal>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
