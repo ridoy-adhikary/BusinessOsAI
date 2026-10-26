@@ -1,5 +1,6 @@
 import { LogOut, Bell, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { ThemeToggle } from "@/components/common/theme-toggle";
 import { useAuthStore } from "@/stores/auth-store";
 import { paths } from "@/routes/paths";
 
@@ -25,6 +26,7 @@ export function Topbar() {
       </div>
 
       <div className="ml-auto flex items-center gap-3">
+        <ThemeToggle />
         <button
           type="button"
           className="relative rounded-lg p-2 text-slate-500 transition-colors hover:bg-brand-50 hover:text-brand-700"

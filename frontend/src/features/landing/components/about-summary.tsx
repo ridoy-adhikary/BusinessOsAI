@@ -28,7 +28,7 @@ export function AboutSummary() {
               <div className="mt-7 flex flex-col gap-4 sm:flex-row">
                 <Link
                   to={paths.about}
-                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-slate-900 px-7 py-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:-translate-y-0.5 hover:bg-brand-700"
+                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-slate-900 px-7 py-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:-translate-y-0.5 hover:bg-brand-800"
                 >
                   Explore the architecture
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

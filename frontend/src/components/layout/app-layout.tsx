@@ -4,7 +4,7 @@ import { Topbar } from "./topbar";
 
 export function AppLayout() {
   return (
-    <div className="flex h-screen overflow-hidden bg-[#f3f0fa]">
+    <div className="app-bg flex h-screen overflow-hidden">
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar />

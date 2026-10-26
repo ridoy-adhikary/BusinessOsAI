@@ -33,9 +33,9 @@ export function AiAssistantPage() {
 
         <Card className="flex flex-col">
           <CardHeader title="Ask BusinessOS AI" subtitle="Routine actions can be taken for you" />
-          <div className="mb-3 flex items-center justify-between rounded-xl bg-gradient-to-br from-slate-900 to-slate-700 px-4 py-3 text-sm text-white">
+          <div className="mb-3 flex items-center justify-between rounded-xl bg-gradient-to-br from-[#141d33] to-[#1f2c47] px-4 py-3 text-sm text-white">
             <span className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-accent-300" /> Suggestions</span>
-            <span className="text-xs text-slate-300">COD risk · Reorder · Forecast</span>
+            <span className="text-xs text-white/60">COD risk · Reorder · Forecast</span>
           </div>
           <div className="mt-auto flex items-center gap-2">
             <input

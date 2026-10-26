@@ -19,14 +19,14 @@ export function CtaBand() {
           <h2 className="text-balance text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
             Ready to run your business on one core?
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-pretty text-sm leading-relaxed text-brand-50 sm:text-base">
+          <p className="mx-auto mt-4 max-w-xl text-pretty text-sm leading-relaxed text-white/80 sm:text-base">
             Set up your workspace in minutes. Start free, add your team, connect your channels —
             and watch every order flow through a single engine.
           </p>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               to={paths.register}
-              className="group inline-flex items-center gap-2 rounded-xl bg-white px-7 py-3.5 text-sm font-bold text-brand-700 shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
+              className="cta-light group inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-sm font-bold shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
             >
               Start Free Trial
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -38,7 +38,7 @@ export function CtaBand() {
               Log in
             </Link>
           </div>
-          <p className="mt-6 text-xs font-medium text-brand-100/90">
+          <p className="mt-6 text-xs font-medium text-white/70">
             Free forever plan · No credit card required · Cancel anytime
           </p>
         </div>

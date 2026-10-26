@@ -45,7 +45,7 @@ export function SectionArch({ section }: SectionArchProps) {
 
             <Link
               to={section.route}
-              className="group/btn mt-6 inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.15em] text-white transition-all hover:-translate-y-0.5 hover:bg-brand-700"
+              className="group/btn mt-6 inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2.5 text-xs font-bold uppercase tracking-[0.15em] text-white transition-all hover:-translate-y-0.5 hover:bg-brand-800"
             >
               Open {section.title.toLowerCase()} in app
               <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
